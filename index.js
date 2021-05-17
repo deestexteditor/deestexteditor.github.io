@@ -32,7 +32,7 @@ function new_lock(){
 // Upload to Gdrive
 // See: https://developers.google.com/drive/api/v3/reference/files/create
 // See: https://tanaikech.github.io/2018/08/13/upload-files-to-google-drive-using-javascript
-async function upload_to_gdrive(Folder_Id,Binobj,Type){
+async function create_file_in_gdrive(Folder_Id,Binobj,Type){
     var Name = (new Date()).toISOString().replace("T","\x20").replace(/:/g,"-").
                                           replace(".","-").replace("Z","\x20GMT");
 
