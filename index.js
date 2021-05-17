@@ -142,27 +142,8 @@ function handle_gapi_load(){
     gapi.load("client:auth2",init_client);
 }
 
-// Load gdrive api
-function load_gdrive_api(){
-    var Head = document.querySelector("head");
-    Head.insertAdjacentHTML(
-        "beforeend",
-        `<script async defer src="https://apis.google.com/js/api.js"></script>`
-    );
-
-    var check_gapi = function(){
-        if (typeof(gapi)=="undefined" || gapi==null){
-            setTimeout(check_gapi,100);
-            return;
-        }
-
-        handle_gapi_load();
-    };
-    setTimeout(check_gapi,100);
-}
-
 // APP ENTRY POINT ========================================
 (function main() {
-    load_gdrive_api();
+    //
 })();
 // EOF
