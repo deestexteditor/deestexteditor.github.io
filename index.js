@@ -10,7 +10,8 @@ const SCOPES    = "https://www.googleapis.com/auth/drive.metadata.readonly\x20"+
 const DISC_DOCS = ["https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"];
 
 // Vars
-var Auth_Btn  = null;
+var Auth_Btn = null;
+var Editor   = null;
 
 // Shorthand for document.querySelector
 function d$(Sel){
@@ -142,8 +143,14 @@ function handle_gapi_load(){
     gapi.load("client:auth2",init_client);
 }
 
-// Load gdrive api
-function check_gapi(){
+// Create edit area
+function create_edit_area(){
+  var Area   = d$("#Edit-Area");
+      Editor = CodeMirror(Area);
+}
+
+// Wait for gapi and start, not necessary but just in case gapi is loaded with async
+function wait_and_start(){
     var check_gapi = function(){
         if (typeof(gapi)=="undefined" || gapi==null){
             setTimeout(check_gapi,100);
@@ -151,12 +158,13 @@ function check_gapi(){
         }
 
         handle_gapi_load();
+        create_edit_area();
     };
     setTimeout(check_gapi,100);
 }
 
 // APP ENTRY POINT ========================================
 (function main() {
-    check_gapi();
+    wait_and_start();
 })();
 // EOF
