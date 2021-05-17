@@ -152,6 +152,16 @@ function create_edit_area(){
     });
 }
 
+// Set content
+function set_content(Content){
+    return Editor.setValue(Content);
+}
+
+// Get content
+function get_content(){
+    return Editor.getValue();
+}
+
 // Wait for gapi and start, not necessary but just in case gapi is loaded with async
 function wait_and_start(){
     var check_gapi = function(){
