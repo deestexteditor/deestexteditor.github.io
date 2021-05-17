@@ -142,8 +142,21 @@ function handle_gapi_load(){
     gapi.load("client:auth2",init_client);
 }
 
+// Load gdrive api
+function check_gapi(){
+    var check_gapi = function(){
+        if (typeof(gapi)=="undefined" || gapi==null){
+            setTimeout(check_gapi,100);
+            return;
+        }
+
+        handle_gapi_load();
+    };
+    setTimeout(check_gapi,100);
+}
+
 // APP ENTRY POINT ========================================
 (function main() {
-    //
+    check_gapi();
 })();
 // EOF
