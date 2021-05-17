@@ -145,8 +145,12 @@ function handle_gapi_load(){
 
 // Create edit area
 function create_edit_area(){
-  var Area   = d$("#Edit-Area");
-      Editor = CodeMirror(Area,{ lineNumbers:true });
+    var Area = d$("#Edit-Area");
+  
+    Editor = CodeMirror(Area,{ 
+        lineNumbers: true,
+        mode:        "javascript"
+    });
 }
 
 // Wait for gapi and start, not necessary but just in case gapi is loaded with async
