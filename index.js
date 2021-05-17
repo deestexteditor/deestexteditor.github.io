@@ -147,9 +147,8 @@ function handle_gapi_load(){
 function create_edit_area(){
     var Area = d$("#Edit-Area");
   
-    Editor = CodeMirror(Area,{ 
-        lineNumbers: true,
-        mode:        "javascript"
+    Editor = CodeMirror.fromTextArea(Area,{ 
+        lineNumbers: true
     });
 }
 
