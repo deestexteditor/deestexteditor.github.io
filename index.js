@@ -226,9 +226,9 @@ async function create_file(){
     File_Id = Id;
     alert("File created, id:\x20"+Id);
 }
-log("j")
+log("jjj")
 // Save file
-function save_file(){
+async function save_file(){
     var File_Name = d$("#File-Name").value;
     
     if (File_Name==null || File_Name.trim().length==0){
