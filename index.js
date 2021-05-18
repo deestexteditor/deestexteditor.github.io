@@ -94,7 +94,7 @@ async function gdrive_update_file(File_Id,File_Name,Binobj){
 
     // Gdrive to return id as indicated in 'fields=id'
     Xhr.open(
-        "patch",
+        "post",
         `https://www.googleapis.com/upload/drive/v3/files/${File_Id}?uploadType=multipart&fields=id`
     );
     Xhr.setRequestHeader("Authorization", "Bearer "+Access_Token);
@@ -114,7 +114,7 @@ async function gdrive_update_file(File_Id,File_Name,Binobj){
     await Lock;
     return File_Id;
 }
-log(222)
+log(100)
 
 // G DRIVE API ----------------------------------------
 // See: https://developers.google.com/drive/api/v3/quickstart/js
