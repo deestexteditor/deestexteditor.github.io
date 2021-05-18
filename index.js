@@ -31,18 +31,15 @@ function new_lock(){
     return [Lock,Unlock];
 }
 
-// Upload to Gdrive
+// Create new file in Gdrive
 // See: https://developers.google.com/drive/api/v3/reference/files/create
 // See: https://tanaikech.github.io/2018/08/13/upload-files-to-google-drive-using-javascript
-async function upload_to_gdrive(Folder_Id,Binobj,File_Name,File_Id){
+async function gdrive_create_file(Folder_Id,File_Name,Binobj){
     var Metadata = {
-        "name":     File_Name,   // Filename at Google Drive
-        "mimeType": "image",     // mimeType at Google Drive
-        "parents":  [Folder_Id], // Folder ID at Google Drive
+        "name":     File_Name,    // Filename at Google Drive
+        "mimeType": "text/plain", // mimeType at Google Drive
+        "parents":  [Folder_Id],  // Folder ID at Google Drive
     };
-    
-    if (File_Id!=null)
-        Metadata.id = File_Id;
 
     // Here gapi is used for retrieving the access token.
     var Access_Token = gapi.auth.getToken().access_token;
@@ -63,11 +60,52 @@ async function upload_to_gdrive(Folder_Id,Binobj,File_Name,File_Id){
     Xhr.setRequestHeader("Authorization", "Bearer "+Access_Token);
     Xhr.responseType = "json";
     Xhr.onload = ()=>{
-        log("[TM Gdrive] Gdrive file id:",Xhr.response.id); // Retrieve uploaded file ID.
+        log("[Dad's TE] Gdrive file id:",Xhr.response.id); // Retrieve uploaded file ID.
         File_Id = Xhr.response.id;
 
         if (File_Id==null)
-            alert("Failed to upload to Gdrive!");
+            alert("Failed to create file in Gdrive!");
+
+        Unlock();
+    };
+    Xhr.send(Form);
+
+    // Wait to get resulting file id
+    await Lock;
+    return File_Id;
+}
+
+// Update a file in Gdrive
+async function gdrive_update_file(File_Id,File_Name,Binobj){
+    var Metadata = {
+        "name":     File_Name,   // Filename at Google Drive
+        "mimeType": "text/plain" // mimeType at Google Drive
+    };
+
+    // Here gapi is used for retrieving the access token.
+    var Access_Token = gapi.auth.getToken().access_token;
+    var Form         = new FormData();
+    Form.append("metadata", new Blob([JSON.stringify(Metadata)], {type: 'application/json'}));
+    Form.append("file",     Binobj);
+
+    // Make request to Gdrive
+    var [Lock,Unlock] = new_lock();
+    var File_Id       = null;
+    var Xhr           = new XMLHttpRequest();
+
+    // Gdrive to return id as indicated in 'fields=id'
+    Xhr.open(
+        "patch",
+        `https://www.googleapis.com/upload/drive/v3/files/${File_Id}?uploadType=multipart&fields=id`
+    );
+    Xhr.setRequestHeader("Authorization", "Bearer "+Access_Token);
+    Xhr.responseType = "json";
+    Xhr.onload = ()=>{
+        log("[Dad's TE] Gdrive file id:",Xhr.response.id); // Retrieve uploaded file ID.
+        File_Id = Xhr.response.id;
+
+        if (File_Id==null)
+            alert("Failed to update file in Gdrive!");
 
         Unlock();
     };
@@ -215,7 +253,7 @@ async function create_file(){
     set_status("Creating file in Google Drive...");
     var Content = get_content();
     var Bin     = new Blob([Content],{type:"text/plain"});
-    var Id      = await upload_to_gdrive(Gstate.folderId,Bin,File_Name);
+    var Id      = await gdrive_create_file(Gstate.folderId,File_Name,Bin);
     clear_status();
     
     if (Id==null){
@@ -226,7 +264,7 @@ async function create_file(){
     File_Id = Id;
     alert("File created, id:\x20"+Id);
 }
-log("jjj")
+
 // Save file
 async function save_file(){
     var File_Name = d$("#File-Name").value;
@@ -237,24 +275,20 @@ async function save_file(){
     }
     
     // Get content and save to gdrive
-    set_status("Saving file to Google Drive...");
+    set_status("Updating file in Google Drive...");
     var Content = get_content();
     var Bin     = new Blob([Content],{type:"text/plain"});
-    var Id      = await upload_to_gdrive(Gstate.folderId,Bin,File_Name,File_Id);
+    var Id      = await gdrive_update_file(File_Id,File_Name,Bin); // File_Id is global
     clear_status();
     
     if (Id==null){
-        alert("Failed to save file to Gdrive!");
+        alert("Failed to update file in Gdrive!");
         return;
     }
     
-    if (Id!=File_Id){
-        alert("WARNING: New file id returned after uploading!");
-        return;
-    }
-    
-    alert("File saved, id:\x20"+Id);
+    alert("File updated, id:\x20"+Id);
 }
+log(999)
 
 // Create or save file
 function create_or_save_file(){
