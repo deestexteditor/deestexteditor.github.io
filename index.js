@@ -275,6 +275,7 @@ async function save_file(){
     }
     
     // Get content and save to gdrive
+    log(File_Id)
     set_status("Updating file in Google Drive...");
     var Content = get_content();
     var Bin     = new Blob([Content],{type:"text/plain"});
@@ -288,7 +289,7 @@ async function save_file(){
     
     alert("File updated, id:\x20"+Id);
 }
-log(999)
+log(111)
 
 // Create or save file
 function create_or_save_file(){
