@@ -90,7 +90,6 @@ async function gdrive_update_file(File_Id,File_Name,Binobj){
 
     // Make request to Gdrive
     var [Lock,Unlock] = new_lock();
-    var File_Id       = null;
     var Xhr           = new XMLHttpRequest();
 
     // Gdrive to return id as indicated in 'fields=id'
@@ -115,6 +114,7 @@ async function gdrive_update_file(File_Id,File_Name,Binobj){
     await Lock;
     return File_Id;
 }
+log(222)
 
 // G DRIVE API ----------------------------------------
 // See: https://developers.google.com/drive/api/v3/quickstart/js
@@ -275,7 +275,6 @@ async function save_file(){
     }
     
     // Get content and save to gdrive
-    log(File_Id)
     set_status("Updating file in Google Drive...");
     var Content = get_content();
     var Bin     = new Blob([Content],{type:"text/plain"});
@@ -289,7 +288,6 @@ async function save_file(){
     
     alert("File updated, id:\x20"+Id);
 }
-log(111)
 
 // Create or save file
 function create_or_save_file(){
