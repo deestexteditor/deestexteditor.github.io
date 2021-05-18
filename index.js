@@ -76,7 +76,7 @@ async function gdrive_create_file(Folder_Id,File_Name,Binobj){
 }
 
 // Update a file in Gdrive
-log("DEBUG HERE: 0");
+log("DEBUG HERE: 1");
 async function gdrive_update_file(File_Id,File_Name,Binobj){
     var Metadata = {
         "name":     File_Name,   // Filename at Google Drive
@@ -95,7 +95,7 @@ async function gdrive_update_file(File_Id,File_Name,Binobj){
 
     // Gdrive to return id as indicated in 'fields=id'
     Xhr.open(
-        "patch",
+        "PATCH",
         `https://www.googleapis.com/upload/drive/v3/files/${File_Id}?uploadType=multipart&fields=id`
     );
     Xhr.setRequestHeader("Authorization", "Bearer "+Access_Token);
@@ -109,7 +109,6 @@ async function gdrive_update_file(File_Id,File_Name,Binobj){
 
         Unlock();
     };
-    alert("DEV ERROR: See CORS error in console log!");
     Xhr.send(Form);
 
     // Wait to get resulting file id
