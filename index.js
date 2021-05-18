@@ -116,7 +116,7 @@ async function gdrive_update_file(File_Id,File_Name,Binobj){
 }
 
 // Get a file from Gdrive, text only
-log(0111)
+log(04333)
 async function gdrive_get_file(File_Id){
     var Metadata = {};
 
@@ -261,7 +261,7 @@ function get_state_in_url(){
 }
 
 // Check gdrive action
-async function check_gdrive_action(){
+function check_gdrive_action(){
     Gstate = get_state_in_url();
     log("[Dad's TE] State from Gdrive:",Gstate);
     
@@ -277,7 +277,7 @@ async function check_gdrive_action(){
     }
     
     if (Gstate.action=="open"){
-        (function wait4gapiauth(){
+        (async function wait4gapiauth(){
             if (gapi.auth==null){
                 setTimeout(wait4gapiauth,100);
                 return;
