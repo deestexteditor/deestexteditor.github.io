@@ -12,6 +12,7 @@ const DISC_DOCS = ["https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"]
 // Vars
 var Auth_Btn = null;
 var Editor   = null;
+var Gstate   = null; // Param 'state' in URL sent by Gdrive
 
 // Shorthand for document.querySelector
 function d$(Sel){
@@ -162,6 +163,29 @@ function get_content(){
     return Editor.getValue();
 }
 
+// Get state sent by Gdrive
+function get_state_in_url(){
+    var Params = new URLSearchParams(top.location.search);
+    return Params.get("state");
+}
+
+// Check gdrive action
+function check_gdrive_action(){
+    Gstate = get_state_in_url();
+    log("[Dad's TE] State from Gdrive:",Gstate);
+    
+    if (Gstate==null){
+        alert("This web app only works in integration with Gdrive!");
+        return;
+    }
+    
+    // Check action
+    if (Gstate.action=="create"){
+        set_content("New file, enter contents here...");
+        return;
+    }
+}
+
 // Wait for gapi and start, not necessary but just in case gapi is loaded with async
 function wait_and_start(){
     var check_gapi = function(){
@@ -172,6 +196,7 @@ function wait_and_start(){
 
         handle_gapi_load();
         create_edit_area();
+        check_gdrive_action();
     };
     setTimeout(check_gapi,100);
 }
