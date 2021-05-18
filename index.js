@@ -320,7 +320,6 @@ function check_gdrive_action(){
         })();        
     } // action 'open'
 }
-log(1555)
 
 // SAVE BUTTON ON UI ----------------------------------------
 // Create file
