@@ -76,6 +76,7 @@ async function gdrive_create_file(Folder_Id,File_Name,Binobj){
 }
 
 // Update a file in Gdrive
+log("DEBUG HERE: 0");
 async function gdrive_update_file(File_Id,File_Name,Binobj){
     var Metadata = {
         "name":     File_Name,   // Filename at Google Drive
@@ -108,20 +109,13 @@ async function gdrive_update_file(File_Id,File_Name,Binobj){
 
         Unlock();
     };
-    
-    try {
-        Xhr.send(Form);
-    }
-    catch (Err){
-        alert("Error:"+Err);
-        return null;
-    }
+    alert("DEV ERROR: See CORS error in console log!");
+    Xhr.send(Form);
 
     // Wait to get resulting file id
     await Lock;
     return File_Id;
-}
-log(1234)
+})
 
 // G DRIVE API ----------------------------------------
 // See: https://developers.google.com/drive/api/v3/quickstart/js
