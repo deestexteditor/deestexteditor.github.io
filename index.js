@@ -201,7 +201,7 @@ function check_gdrive_action(){
         return;
     }
 }
-log("9")
+
 // Create file
 async function create_file(){
     var File_Name = d$("#File-Name").value;
@@ -226,9 +226,34 @@ async function create_file(){
     File_Id = Id;
     alert("File created, id:\x20"+Id);
 }
-
+log("j")
 // Save file
 function save_file(){
+    var File_Name = d$("#File-Name").value;
+    
+    if (File_Name==null || File_Name.trim().length==0){
+        alert("Please enter file name!");
+        return;
+    }
+    
+    // Get content and save to gdrive
+    set_status("Saving file to Google Drive...");
+    var Content = get_content();
+    var Bin     = new Blob([Content],{type:"text/plain"});
+    var Id      = await upload_to_gdrive(Gstate.folderId,Bin,File_Name,File_Id);
+    clear_status();
+    
+    if (Id==null){
+        alert("Failed to save file to Gdrive!");
+        return;
+    }
+    
+    if (Id!=File_Id){
+        alert("WARNING: New file id returned after uploading!");
+        return;
+    }
+    
+    alert("File saved, id:\x20"+Id);
 }
 
 // Create or save file
