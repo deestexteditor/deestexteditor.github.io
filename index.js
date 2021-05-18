@@ -13,6 +13,7 @@ const DISC_DOCS = ["https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"]
 var Auth_Btn = null;
 var Editor   = null;
 var Gstate   = null; // Param 'state' in URL sent by Gdrive
+var File_Id  = null;
 
 // Shorthand for document.querySelector
 function d$(Sel){
@@ -193,6 +194,13 @@ function check_gdrive_action(){
     if (Gstate.action=="create"){
         set_content("New file, enter contents here...");
         return;
+    }
+}
+
+// Create or save file
+function create_or_save_file(){
+    if (File_Id!=null){
+        //
     }
 }
 
