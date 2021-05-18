@@ -115,6 +115,43 @@ async function gdrive_update_file(File_Id,File_Name,Binobj){
     return File_Id;
 }
 
+// Get a file from Gdrive, text only
+log(555)
+async function gdrive_get_file(File_Id){
+    var Metadata = {};
+
+    // Here gapi is used for retrieving the access token.
+    var Access_Token = gapi.auth.getToken().access_token;
+    var Form         = new FormData();
+    Form.append("metadata", new Blob([JSON.stringify(Metadata)], {type: "application/json"}));
+
+    // Make request to Gdrive
+    var [Lock,Unlock] = new_lock();
+    var Xhr           = new XMLHttpRequest();
+
+    // Gdrive to return id as indicated in 'fields=id'
+    Xhr.open(
+        "GET", // USE 'GET' INSTEAD OF 'get', SEE THE PROBLEM WITH 'patch' IN gdrive_update_file
+        `https://www.googleapis.com/drive/v3/files/${File_Id}?alt=media`
+    );
+    Xhr.setRequestHeader("Authorization", "Bearer "+Access_Token);
+    Xhr.responseType = "json";
+    Xhr.onload = ()=>{
+        log("[Dad's TE] Gdrive file id:",Xhr.response.id); // Retrieve uploaded file ID.
+        File_Id = Xhr.response.id;
+
+        if (File_Id==null)
+            alert("Failed to get file from Gdrive!");
+
+        Unlock();
+    };
+    Xhr.send(Form);
+
+    // Wait to get resulting file id
+    await Lock;
+    return File_Id;
+}
+
 // G DRIVE API ----------------------------------------
 // See: https://developers.google.com/drive/api/v3/quickstart/js
 function init_client() {
@@ -223,7 +260,7 @@ function get_state_in_url(){
 }
 
 // Check gdrive action
-function check_gdrive_action(){
+async function check_gdrive_action(){
     Gstate = get_state_in_url();
     log("[Dad's TE] State from Gdrive:",Gstate);
     
@@ -236,6 +273,12 @@ function check_gdrive_action(){
     if (Gstate.action=="create"){
         set_content("New file, enter contents here...");
         return;
+    }
+    
+    if (Gstate.action=="open"){
+        File_Id = Gstate.ids[0];
+        set_content(await gdrive_get_file(File_Id));
+        return;        
     }
 }
 
