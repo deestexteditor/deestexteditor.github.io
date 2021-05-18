@@ -245,7 +245,8 @@ function create_edit_area(){
     var Area = d$("#Edit-Area");
   
     Editor = CodeMirror.fromTextArea(Area,{ 
-        lineNumbers: true
+        lineNumbers: true,
+        mode:        null
     });
 }
 
