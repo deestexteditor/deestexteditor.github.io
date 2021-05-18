@@ -296,11 +296,13 @@ function check_gdrive_action(){
     }
     
     // Check action
+    // New file
     if (Gstate.action=="create"){
         set_content("New file, enter contents here...");
         return;
     }
     
+    // Edit file
     if (Gstate.action=="open"){
         (async function wait4gapiauth(){
             if (Authed!="yes"){ // Wait until authenticated
@@ -308,14 +310,17 @@ function check_gdrive_action(){
                 return;
             }
             
+            // Load file content
             File_Id = Gstate.ids[0];
+            set_status("Loading file contents...");
             var File_Name,Content = await gdrive_get_file(File_Id);
+            clear_status();
             d$("#File-Name").value = File_Name;
             set_content(Content);
         })();        
     } // action 'open'
 }
-log(0555)
+log(0666)
 
 // SAVE BUTTON ON UI ----------------------------------------
 // Create file
