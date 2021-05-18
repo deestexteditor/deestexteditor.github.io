@@ -117,7 +117,7 @@ async function gdrive_update_file(File_Id,File_Name,Binobj){
 }
 
 // Get a file from Gdrive, text only
-log(03)
+log(01231343)
 async function gdrive_get_file(File_Id){
     var Metadata = {};
 
@@ -129,6 +129,7 @@ async function gdrive_get_file(File_Id){
     // Make request to Gdrive
     var [Lock,Unlock] = new_lock();
     var Xhr           = new XMLHttpRequest();
+    var Textcontent   = null;
 
     // Gdrive to return id as indicated in 'fields=id'
     Xhr.open(
@@ -136,25 +137,17 @@ async function gdrive_get_file(File_Id){
         `https://www.googleapis.com/drive/v3/files/${File_Id}?alt=media`
     );
     Xhr.setRequestHeader("Authorization", "Bearer "+Access_Token);
-    Xhr.responseType = "json";
+    Xhr.responseType = "text";
     Xhr.onload = ()=>{
-        log(Xhr)
-        log("t",Xhr.responseText)
-        log("b",Xhr.getBody)
-        log(Xhr.response)
-        log("[Dad's TE] Gdrive file id:",Xhr.response.id); // Retrieve uploaded file ID.
-        File_Id = Xhr.response.id;
-
-        if (File_Id==null)
-            alert("Failed to get file from Gdrive!");
-
+        log("[Dad's TE] Gdrive file len:",Xhr.responseText.length); // Retrieve uploaded file ID.
+        Textcontent = Xhr.responseText;
         Unlock();
     };
     Xhr.send(Form);
 
     // Wait to get resulting file id
     await Lock;
-    return File_Id;
+    return Textcontent;
 }
 
 // G DRIVE API ----------------------------------------
