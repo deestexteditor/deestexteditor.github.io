@@ -115,7 +115,7 @@ async function gdrive_update_file(File_Id,File_Name,Binobj){
     // Wait to get resulting file id
     await Lock;
     return File_Id;
-})
+}
 
 // G DRIVE API ----------------------------------------
 // See: https://developers.google.com/drive/api/v3/quickstart/js
