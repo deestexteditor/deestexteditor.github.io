@@ -34,12 +34,15 @@ function new_lock(){
 // Upload to Gdrive
 // See: https://developers.google.com/drive/api/v3/reference/files/create
 // See: https://tanaikech.github.io/2018/08/13/upload-files-to-google-drive-using-javascript
-async function create_file_in_gdrive(Folder_Id,Binobj,File_Name){
+async function upload_to_gdrive(Folder_Id,Binobj,File_Name,File_Id){
     var Metadata = {
         "name":     File_Name,   // Filename at Google Drive
         "mimeType": "image",     // mimeType at Google Drive
         "parents":  [Folder_Id], // Folder ID at Google Drive
     };
+    
+    if (File_Id!=null)
+        Metadata.id = File_Id;
 
     // Here gapi is used for retrieving the access token.
     var Access_Token = gapi.auth.getToken().access_token;
@@ -198,7 +201,7 @@ function check_gdrive_action(){
         return;
     }
 }
-log("f")
+log("9")
 // Create file
 async function create_file(){
     var File_Name = d$("#File-Name").value;
@@ -212,7 +215,7 @@ async function create_file(){
     set_status("Creating file in Google Drive...");
     var Content = get_content();
     var Bin     = new Blob([Content],{type:"text/plain"});
-    var Id      = await create_file_in_gdrive(Gstate.folderId,Bin,File_Name);
+    var Id      = await upload_to_gdrive(Gstate.folderId,Bin,File_Name);
     clear_status();
     
     if (Id==null){
@@ -221,7 +224,7 @@ async function create_file(){
     }
     
     File_Id = Id;
-    alert("File created, id:"+Id);
+    alert("File created, id:\x20"+Id);
 }
 
 // Save file
