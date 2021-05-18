@@ -156,6 +156,16 @@ function get_content(){
     return Editor.getValue();
 }
 
+// Set status
+function set_status(Html){
+    d$("#Text-Status").innerHTML = Html;
+}
+
+// Clear status
+function clear_status(){
+    d$("#Text-Status").innerHTML = "--";
+}
+
 // Get state sent by Gdrive
 function get_state_in_url(){
     var Params = new URLSearchParams(top.location.search);
@@ -188,7 +198,7 @@ function check_gdrive_action(){
         return;
     }
 }
-
+log("f")
 // Create file
 async function create_file(){
     var File_Name = d$("#File-Name").value;
@@ -199,9 +209,11 @@ async function create_file(){
     }
     
     // Get content and save to gdrive
+    set_status("Creating file in Google Drive...");
     var Content = get_content();
     var Bin     = new Blob([Content],{type:"text/plain"});
     var Id      = await create_file_in_gdrive(Gstate.folderId,Bin,File_Name);
+    clear_status();
     
     if (Id==null){
         alert("Failed to create file in Gdrive!");
