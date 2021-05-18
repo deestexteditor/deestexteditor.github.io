@@ -117,10 +117,36 @@ async function gdrive_update_file(File_Id,File_Name,Binobj){
 }
 
 // Get a file from Gdrive, text only
-log(01231343)
 async function gdrive_get_file(File_Id){
     var Metadata = {};
 
+    // Get file info ----------------------------------------
+    // Here gapi is used for retrieving the access token.
+    var Access_Token = gapi.auth.getToken().access_token;
+    var Form         = new FormData();
+    Form.append("metadata", new Blob([JSON.stringify(Metadata)], {type: "application/json"}));
+
+    // Make request to Gdrive
+    var [Lock,Unlock] = new_lock();
+    var Xhr           = new XMLHttpRequest();
+    var File_Name     = null;
+
+    // Gdrive to return id as indicated in 'fields=id'
+    Xhr.open(
+        "GET", // USE 'GET' INSTEAD OF 'get', SEE THE PROBLEM WITH 'patch' IN gdrive_update_file
+        `https://www.googleapis.com/drive/v3/files/${File_Id}`
+    );
+    Xhr.setRequestHeader("Authorization", "Bearer "+Access_Token);
+    Xhr.responseType = "json";
+    Xhr.onload = ()=>{
+        log("[Dad's TE] Gdrive file name:",Xhr.response.name); // Retrieve uploaded file ID.
+        File_Name = Xhr.response.name;
+        Unlock();
+    };
+    Xhr.send(Form);
+    await Lock;
+    
+    // Get file content ----------------------------------------
     // Here gapi is used for retrieving the access token.
     var Access_Token = gapi.auth.getToken().access_token;
     var Form         = new FormData();
@@ -144,10 +170,10 @@ async function gdrive_get_file(File_Id){
         Unlock();
     };
     Xhr.send(Form);
-
-    // Wait to get resulting file id
     await Lock;
-    return Textcontent;
+
+    // Result    
+    return File_Name,Textcontent;
 }
 
 // G DRIVE API ----------------------------------------
@@ -283,10 +309,13 @@ function check_gdrive_action(){
             }
             
             File_Id = Gstate.ids[0];
-            set_content(await gdrive_get_file(File_Id));
+            var File_Name,Content = await gdrive_get_file(File_Id);
+            d$("#File-Name").value = File_Name;
+            set_content(Content);
         })();        
     } // action 'open'
 }
+log(0555)
 
 // SAVE BUTTON ON UI ----------------------------------------
 // Create file
