@@ -116,7 +116,7 @@ async function gdrive_update_file(File_Id,File_Name,Binobj){
 }
 
 // Get a file from Gdrive, text only
-log(555)
+log(222)
 async function gdrive_get_file(File_Id){
     var Metadata = {};
 
@@ -282,6 +282,7 @@ async function check_gdrive_action(){
     }
 }
 
+// SAVE BUTTON ON UI ----------------------------------------
 // Create file
 async function create_file(){
     var File_Name = d$("#File-Name").value;
@@ -356,10 +357,11 @@ function create_or_save_file(){
     create_file();
 }
 
+// APP ENTRY POINT ========================================
 // Wait for gapi and start, not necessary but just in case gapi is loaded with async
 function wait_and_start(){
     var check_gapi = function(){
-        if (typeof(gapi)=="undefined" || gapi==null){
+        if (typeof(gapi)=="undefined" || gapi==null || typeof(gapi.auth)=="undefined" || gapi.auth==null){
             setTimeout(check_gapi,100);
             return;
         }
@@ -371,7 +373,6 @@ function wait_and_start(){
     setTimeout(check_gapi,100);
 }
 
-// APP ENTRY POINT ========================================
 (function main() {
     wait_and_start();
 })();
