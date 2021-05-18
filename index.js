@@ -77,7 +77,7 @@ async function gdrive_create_file(Folder_Id,File_Name,Binobj){
 
 // Update a file in Gdrive
 File_Id = "1Gf1p75hFQ-9Ec-rhsZ-dUazx3tsavcgI";
-log(123)
+log(3123)
 async function gdrive_update_file(File_Id,File_Name,Binobj){
     var Metadata = {
         "name":     File_Name,   // Filename at Google Drive
@@ -97,7 +97,7 @@ async function gdrive_update_file(File_Id,File_Name,Binobj){
     // Gdrive to return id as indicated in 'fields=id'
     Xhr.open(
         "patch",
-        `https://www.googleapis.com/upload/drive/v3/files/${File_Id}?uploadType=multipart&fields=id`
+        `https://www.googleapis.com/upload/drive/v3/files/${File_Id}?uploadType=multipart`
     );
     Xhr.setRequestHeader("Authorization", "Bearer "+Access_Token);
     Xhr.responseType = "json";
