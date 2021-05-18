@@ -173,7 +173,7 @@ async function gdrive_get_file(File_Id){
     await Lock;
 
     // Result    
-    return File_Name,Textcontent;
+    return [File_Name,Textcontent];
 }
 
 // G DRIVE API ----------------------------------------
@@ -313,14 +313,14 @@ function check_gdrive_action(){
             // Load file content
             File_Id = Gstate.ids[0];
             set_status("Loading file contents...");
-            var File_Name,Content = await gdrive_get_file(File_Id);
+            var [File_Name,Content] = await gdrive_get_file(File_Id);
             clear_status();
             d$("#File-Name").value = File_Name;
             set_content(Content);
         })();        
     } // action 'open'
 }
-log(0666)
+log(1555)
 
 // SAVE BUTTON ON UI ----------------------------------------
 // Create file
