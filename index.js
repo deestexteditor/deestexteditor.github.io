@@ -117,7 +117,7 @@ async function gdrive_update_file(File_Id,File_Name,Binobj){
 }
 
 // Get a file from Gdrive, text only
-log(0999)
+log(03)
 async function gdrive_get_file(File_Id){
     var Metadata = {};
 
@@ -139,6 +139,7 @@ async function gdrive_get_file(File_Id){
     Xhr.responseType = "json";
     Xhr.onload = ()=>{
         log(Xhr)
+        log("t",Xhr.responseText)
         log("b",Xhr.getBody)
         log(Xhr.response)
         log("[Dad's TE] Gdrive file id:",Xhr.response.id); // Retrieve uploaded file ID.
