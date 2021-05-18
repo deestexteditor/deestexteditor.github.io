@@ -34,15 +34,7 @@ function new_lock(){
 // Upload to Gdrive
 // See: https://developers.google.com/drive/api/v3/reference/files/create
 // See: https://tanaikech.github.io/2018/08/13/upload-files-to-google-drive-using-javascript
-async function create_file_in_gdrive(Folder_Id,Binobj,Type){
-    var Name = (new Date()).toISOString().replace("T","\x20").replace(/:/g,"-").
-                                          replace(".","-").replace("Z","\x20GMT");
-
-    if (Type=="text")
-        var File_Name = Name+".txt";
-    else
-        var File_Name = Name;
-
+async function create_file_in_gdrive(Folder_Id,Binobj,File_Name){
     var Metadata = {
         "name":     File_Name,   // Filename at Google Drive
         "mimeType": "image",     // mimeType at Google Drive
@@ -197,11 +189,56 @@ function check_gdrive_action(){
     }
 }
 
+// Create file
+async function create_file(){
+    var File_Name = d$("#File-Name").value;
+    
+    if (File_Name==null || File_Name.trim().length==0){
+        alert("Please enter file name!");
+        return;
+    }
+    
+    // Get content and save to gdrive
+    var Content = get_content();
+    var Bin     = new Blob([Content],{type:"text/plain"});
+    var Id      = await create_file_in_gdrive(Gstate.folderId,Bin,File_Name);
+    
+    if (Id==null){
+        alert("Failed to create file in Gdrive!");
+        return;
+    }
+    
+    File_Id = Id;
+    alert("File created, id:"+Id);
+}
+
+// Save file
+function save_file(){
+}
+
 // Create or save file
 function create_or_save_file(){
-    if (File_Id!=null){
-        //
+    if (Gstate==null || Object.keys(Gstate).length==0){
+        alert("This web app only works with Gdrive!");
+        return;
     }
+    
+    if (File_Id!=null){
+        save_file();
+        return;
+    }
+    
+    if (Gstate.folderId==null){
+        alert("Folder id not found in state param!");
+        return;
+    }
+    
+    if (Gstate.action!=="create"){
+        alert("The action stated in state param is not 'create'!");
+        return;
+    }
+    
+    create_file();
 }
 
 // Wait for gapi and start, not necessary but just in case gapi is loaded with async
