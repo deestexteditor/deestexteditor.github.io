@@ -166,7 +166,17 @@ function get_content(){
 // Get state sent by Gdrive
 function get_state_in_url(){
     var Params = new URLSearchParams(top.location.search);
-    return Params.get("state");
+    var State  = Params.get("state");
+  
+    if (State==null)
+        return {};
+    
+    try {
+        return JSON.parse(State);
+    }
+    catch (Err){
+        return {};
+    }
 }
 
 // Check gdrive action
@@ -174,7 +184,7 @@ function check_gdrive_action(){
     Gstate = get_state_in_url();
     log("[Dad's TE] State from Gdrive:",Gstate);
     
-    if (Gstate==null){
+    if (Gstate==null || Object.keys(Gstate).length==0){
         alert("This web app only works in integration with Gdrive!");
         return;
     }
