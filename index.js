@@ -11,6 +11,7 @@ const DISC_DOCS = ["https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"]
 
 // Vars
 var Auth_Btn = null;
+var Authed   = "no";
 var Editor   = null;
 var Gstate   = null; // Param 'state' in URL sent by Gdrive
 var File_Id  = null;
@@ -116,7 +117,7 @@ async function gdrive_update_file(File_Id,File_Name,Binobj){
 }
 
 // Get a file from Gdrive, text only
-log(04333)
+log(05)
 async function gdrive_get_file(File_Id){
     var Metadata = {};
 
@@ -186,10 +187,12 @@ function update_signin_status(signed_in) {
     if (signed_in) {
         Auth_Btn.innerHTML = "Auth'ed";
         Auth_Btn.setAttribute("authed","yes");
+        Authed = "yes";
     }
     else {
         Auth_Btn.innerHTML = "Auth";
         Auth_Btn.setAttribute("authed","no");
+        Authed = "no";
     }
 }
 
@@ -278,7 +281,7 @@ function check_gdrive_action(){
     
     if (Gstate.action=="open"){
         (async function wait4gapiauth(){
-            if (gapi.auth==null){
+            if (Authed!="yes"){ // Wait until authenticated
                 setTimeout(wait4gapiauth,100);
                 return;
             }
