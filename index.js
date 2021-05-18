@@ -76,7 +76,6 @@ async function gdrive_create_file(Folder_Id,File_Name,Binobj){
 }
 
 // Update a file in Gdrive
-log("DEBUG HERE: 1");
 async function gdrive_update_file(File_Id,File_Name,Binobj){
     var Metadata = {
         "name":     File_Name,   // Filename at Google Drive
@@ -95,7 +94,7 @@ async function gdrive_update_file(File_Id,File_Name,Binobj){
 
     // Gdrive to return id as indicated in 'fields=id'
     Xhr.open(
-        "PATCH",
+        "PATCH", // BIG ISSUE: G DRIVE SERVERS ACCEPT 'PACTH' AND NOT 'patch'
         `https://www.googleapis.com/upload/drive/v3/files/${File_Id}?uploadType=multipart&fields=id`
     );
     Xhr.setRequestHeader("Authorization", "Bearer "+Access_Token);
