@@ -116,7 +116,7 @@ async function gdrive_update_file(File_Id,File_Name,Binobj){
 }
 
 // Get a file from Gdrive, text only
-log(222)
+log(0111)
 async function gdrive_get_file(File_Id){
     var Metadata = {};
 
@@ -137,6 +137,7 @@ async function gdrive_get_file(File_Id){
     Xhr.setRequestHeader("Authorization", "Bearer "+Access_Token);
     Xhr.responseType = "json";
     Xhr.onload = ()=>{
+        log(Xhr.response)
         log("[Dad's TE] Gdrive file id:",Xhr.response.id); // Retrieve uploaded file ID.
         File_Id = Xhr.response.id;
 
@@ -276,10 +277,16 @@ async function check_gdrive_action(){
     }
     
     if (Gstate.action=="open"){
-        File_Id = Gstate.ids[0];
-        set_content(await gdrive_get_file(File_Id));
-        return;        
-    }
+        (function wait4gapiauth(){
+            if (gapi.auth==null){
+                setTimeout(wait4gapiauth,100);
+                return;
+            }
+            
+            File_Id = Gstate.ids[0];
+            set_content(await gdrive_get_file(File_Id));
+        })();        
+    } // action 'open'
 }
 
 // SAVE BUTTON ON UI ----------------------------------------
@@ -361,7 +368,7 @@ function create_or_save_file(){
 // Wait for gapi and start, not necessary but just in case gapi is loaded with async
 function wait_and_start(){
     var check_gapi = function(){
-        if (typeof(gapi)=="undefined" || gapi==null || typeof(gapi.auth)=="undefined" || gapi.auth==null){
+        if (typeof(gapi)=="undefined" || gapi==null){
             setTimeout(check_gapi,100);
             return;
         }
