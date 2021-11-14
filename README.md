@@ -1,2 +1,3 @@
-# dadstexteditor.github.io
-Dad's Text Editor
+# deestexteditor.github.io
+Dee's Text Editor
+***
