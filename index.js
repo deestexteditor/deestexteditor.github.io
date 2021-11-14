@@ -2,10 +2,9 @@
 const log = top.console.log;
 
 // G-API
-const API_KEY   = "AIzaSyCpVy-FZZurgg5qxNttSbUEE_2FYiNSh9s";
-const CLIENT_ID = "946994473664-pu8mk7s22fv96d0cp0tf95givlbn5qic.apps.googleusercontent.com";
-const SCOPES    = "https://www.googleapis.com/auth/drive.metadata.readonly\x20"+
-                  "https://www.googleapis.com/auth/drive.file\x20"+
+const API_KEY   = "AIzaSyAjzQ4kUd27I-zLjkSShy3m4789gpcegxs";
+const CLIENT_ID = "203503549691-4phjiohb5sg8gfardkqsf899qmfdvam2.apps.googleusercontent.com";
+const SCOPES    = "https://www.googleapis.com/auth/drive.file\x20"+
                   "https://www.googleapis.com/auth/drive.install";
 const DISC_DOCS = ["https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"];
 
